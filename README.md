@@ -113,3 +113,15 @@ Now that we have committed our changes in our branch, we want to submit these ch
  * Click Push
   * If there are errors you will need to fix those otherwise wait while SourceTree is updating your Github fork
   * Note: If you have updated your local master branch from ```Upstream``` you want to push to your fork's master (aka origin)
+
+### Step 7: Create Pull Request
+Now that we've pushed to our fork we want to create a ```Pull Request``` to update our main project. 
+* Head over to Github and if you go to TeamTalisman/Shattered-Talisman you'll see the new branch you push will appear and it will ask if you want to Compare and make a pull request. Click it.
+* First, make sure the base fork is ```TeamTalisman/Shattered-Talisman```, the head fork is your fork and under compare is the branch you want to merge
+* When openning a pull request give it an appropriate and short title and a description of all your changes.
+* On the sidebar you can request a review from an admin, assign someone to check your changes, add labels that specify what the PR is about, and it has milestones
+* If you are unable to merge because of conflicts you will have to fix those
+* Once your done create the pull request
+* One the PR is created you have to wait for someone to review and merge the PR, so keep working on other features
+* Once your PR is merged, I advise you to delete your branch so your fork stays clean
+ * Also delete branches you don't need locally in SourceTree
