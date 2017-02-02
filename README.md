@@ -130,7 +130,7 @@ Now that we have committed our changes in our branch, we want to submit these ch
 ### Step 7: Create Pull Request
 Now that we've pushed to our fork we want to create a ```Pull Request``` to update our main project. 
 * Head over to Github and if you go to TeamTalisman/Shattered-Talisman you'll see the new branch you push will appear and it will ask if you want to Compare and make a pull request. Click it.
- * ![Screenshot](https://cloud.githubusercontent.com/assets/6536121/22535598/1c185d96-e8ca-11e6-95e0-f8cf105274dc.PNG)
+ * ![Screenshot](https://cloud.githubusercontent.com/assets/6536121/22535597/1c0e38de-e8ca-11e6-8704-23e97e82affd.PNG)
 * First, make sure the base fork is ```TeamTalisman/Shattered-Talisman```, the head fork is your fork and under compare is the branch you want to merge
 * When openning a pull request give it an appropriate and short title and a description of all your changes.
 * On the sidebar you can request a review from an admin, assign someone to check your changes, add labels that specify what the PR is about, and it has milestones
