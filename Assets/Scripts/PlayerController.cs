@@ -26,6 +26,12 @@ public class PlayerController : MonoBehaviour {
 		public string JUMP_AXIS = "Jump";
 	}
 
+	[System.SerializableAttribute]
+	public class AnimatorSettings {
+		public Animator animator;
+		public float animationSpeedMultiplier = 1f;
+	}
+
 	Vector3 velocity = Vector3.zero;
 	Quaternion targetRotation;
 	Rigidbody rBody;
@@ -34,10 +40,10 @@ public class PlayerController : MonoBehaviour {
 	public Quaternion TargetRotation {
 		get { return targetRotation; }
 	}
-
+	
+	public AnimatorSettings animatorSettings = new AnimatorSettings();
 	public MoveSettings moveSettings = new MoveSettings();
 	public PhysicSettings physicsSettings = new PhysicSettings();
-
 	public InputSettings inputSettings = new InputSettings();
 
 	bool Grounded() {
@@ -55,6 +61,8 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		forwardInput = turnInput = jumpInput = 0;
+
+		animatorSettings.animator = GetComponent<Animator>();
 	}
 
 	void GetInput() {
