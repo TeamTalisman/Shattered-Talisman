@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -47,6 +48,8 @@ public class PlayerController : MonoBehaviour {
 	public InputSettings inputSettings = new InputSettings();
 	public Checkpoint lastCheckpoint;
 
+	public int health;
+	
 	bool Grounded() {
 		return Physics.Raycast(transform.position, Vector3.down, moveSettings.distanceToGrounded, moveSettings.ground);
 	}
@@ -123,6 +126,7 @@ public class PlayerController : MonoBehaviour {
 
 	void Init() {
 		targetRotation = transform.rotation;
+		health = 3;
 		Spawn();
 	}
 
@@ -146,24 +150,50 @@ public class PlayerController : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.tag == "Void") {
-			Debug.Log("YOU DIE!");
-			Spawn();
+			CollideVoid();
 		} else if (other.tag == "CheckPoint") {
-			Debug.Log("YOU GOT A CHECKPOINT");
 			Checkpoint checkpoint = other.gameObject.GetComponent<Checkpoint>();
 			CollideCheckpoint(checkpoint);
 		} else if (other.tag == "EndPoint") {
-			Checkpoint checkpoint = other.gameObject.GetComponent<Checkpoint>();
-			Debug.Log("YOU FINISHED THE LEVEL!");
-			CollideCheckpoint(checkpoint);
+			Endpoint endpoint = other.gameObject.GetComponent<Endpoint>();
+			CollideEndPoint(endpoint);
+		}
+	}
+
+	void CollideVoid() {
+		Debug.Log("YOU FELL!");
+		health --;
+
+		if (health > 0) {
+			Spawn();
+		} else {
+			float fadeTime = gameObject.GetComponent<Fading>().BeginFade(1);
+			Invoke("GameOver", fadeTime);
 		}
 	}
 
 	void CollideCheckpoint(Checkpoint checkpoint) {
+		Debug.Log("YOU GOT A CHECKPOINT");
 		// Set out last checkpoint to checkpoint
 		lastCheckpoint = checkpoint;
 
 		// Collect checkpoint
 		lastCheckpoint.Collect();
+	}
+
+	void CollideEndPoint(Endpoint endpoint) {
+		Debug.Log("YOU FINISHED THE LEVEL!");
+		float fadeTime = gameObject.GetComponent<Fading>().BeginFade(1);
+		// Set out last checkpoint to checkpoint
+		// endpoint.Collect();
+		Invoke("EndLevel", fadeTime);
+	}
+
+	public void GameOver() {
+		SceneManager.LoadScene("GameOverScene");
+	}
+
+	public void EndLevel() {
+		SceneManager.LoadScene("EndScene");
 	}
 }
