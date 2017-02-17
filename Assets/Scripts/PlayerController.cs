@@ -45,14 +45,13 @@ public class PlayerController : MonoBehaviour {
 	public MoveSettings moveSettings = new MoveSettings();
 	public PhysicSettings physicsSettings = new PhysicSettings();
 	public InputSettings inputSettings = new InputSettings();
+	public Checkpoint lastCheckpoint;
 
 	bool Grounded() {
 		return Physics.Raycast(transform.position, Vector3.down, moveSettings.distanceToGrounded, moveSettings.ground);
 	}
 
-	void Start() {
-		targetRotation = transform.rotation;
-
+	void Awake() {
 		if (GetComponent<Rigidbody>()) {
 			rBody = GetComponent<Rigidbody>();
 		}
@@ -61,8 +60,13 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		forwardInput = turnInput = jumpInput = 0;
+		rBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
 		animatorSettings.animator = GetComponent<Animator>();
+	}
+
+	void Start() {
+		Init();
 	}
 
 	void GetInput() {
@@ -87,9 +91,11 @@ public class PlayerController : MonoBehaviour {
 		if (Mathf.Abs(forwardInput) > inputSettings.inputDelay) {
 			// move
 			velocity.z = moveSettings.forwardVelocity * forwardInput;
+			animatorSettings.animator.SetFloat("Forward", forwardInput, 0.1f, Time.deltaTime);
 		} else {
 			// zero velocity
 			velocity.z = 0;
+			// animatorSettings.animator.ApplyBuiltinRootMotion();
 		}
 	}
 
@@ -97,6 +103,8 @@ public class PlayerController : MonoBehaviour {
 		if (Mathf.Abs(turnInput) > inputSettings.inputDelay) {
 			targetRotation *= Quaternion.AngleAxis(moveSettings.rotateVelocity * turnInput * Time.deltaTime, Vector3.up);
 			transform.rotation = targetRotation;
+			animatorSettings.animator.SetFloat("Turn", turnInput, 0.1f, Time.deltaTime);
+
 		}
 	}
 
@@ -111,5 +119,51 @@ public class PlayerController : MonoBehaviour {
 			// decrease velocity.y
 			velocity.y -= physicsSettings.downAcceleration;
 		}
+	}
+
+	void Init() {
+		targetRotation = transform.rotation;
+		Spawn();
+	}
+
+	void Spawn() {
+		// If we don't have a checkpoint
+		if (lastCheckpoint == null) {
+			// Find the spawn point and get its Checkpoint script
+			lastCheckpoint = GameObject.FindGameObjectWithTag("SpawnPoint").
+												GetComponent<Checkpoint>();
+			// Collect the checkpoint
+			lastCheckpoint.Collect();
+		}
+
+		// Set the transform position of player to that of the checkpoint
+		SetPosition(lastCheckpoint.transform.position);
+	}
+
+	void SetPosition(Vector3 newPosition) {
+		transform.position = newPosition;
+	}
+
+	void OnTriggerEnter(Collider other) {
+		if (other.tag == "Void") {
+			Debug.Log("YOU DIE!");
+			Spawn();
+		} else if (other.tag == "CheckPoint") {
+			Debug.Log("YOU GOT A CHECKPOINT");
+			Checkpoint checkpoint = other.gameObject.GetComponent<Checkpoint>();
+			CollideCheckpoint(checkpoint);
+		} else if (other.tag == "EndPoint") {
+			Checkpoint checkpoint = other.gameObject.GetComponent<Checkpoint>();
+			Debug.Log("YOU FINISHED THE LEVEL!");
+			CollideCheckpoint(checkpoint);
+		}
+	}
+
+	void CollideCheckpoint(Checkpoint checkpoint) {
+		// Set out last checkpoint to checkpoint
+		lastCheckpoint = checkpoint;
+
+		// Collect checkpoint
+		lastCheckpoint.Collect();
 	}
 }

@@ -4,24 +4,20 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour {
 
-    private float timer = 600.0f;
+    public float timer = 600.0f;
 	
 	// Update is called once per frame
 	void Update () {
 
         timer -= Time.deltaTime;
 
-        if (timer <= 0)
-        {
+        if (timer <= 0) {
             timer = 0;
-
-
         }
 
 	}
 
-    private void OnGUI()
-    {
+    private void OnGUI() {
         GUI.Box(new Rect(10,10,50,20),"" + timer.ToString("0"));
 
     }

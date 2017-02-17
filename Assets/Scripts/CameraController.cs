@@ -71,7 +71,7 @@ public class CameraController : MonoBehaviour {
 	void Start () {
 		SetCameraTarget(target);
 		vOrbitInput = hOrbitInput = zoomInput = hOrbitSnapInput = mouseOrbitInput = vMouseOrbitInput = 0;
-		MoveToTarget();
+		// MoveToTarget();
 		collision.Initialize(Camera.main);
 		collision.UpdateCameraClipPoints(transform.position, transform.rotation, ref collision.adjustedCameraClipPoints);
 		collision.UpdateCameraClipPoints(transform.position, transform.rotation, ref collision.desiredCameraClipPoints);
@@ -93,9 +93,9 @@ public class CameraController : MonoBehaviour {
 	}
 
 	public void GetInput() {
-		// vOrbitInput = Input.GetAxisRaw(input.ORBIT_VERTICAL);
-		// hOrbitInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL);
-		// hOrbitSnapInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL_SNAP);
+		vOrbitInput = Input.GetAxisRaw(input.ORBIT_VERTICAL);
+		hOrbitInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL);
+		hOrbitSnapInput = Input.GetAxisRaw(input.ORBIT_HORIZONTAL_SNAP);
 		zoomInput = Input.GetAxisRaw(input.ZOOM);
 		// mouseOrbitInput = Input.GetAxisRaw(input.MOUSE_ORBIT);
 		// vMouseOrbitInput = Input.GetAxisRaw(input.MOUSE_ORBIT_VERTICAL);
