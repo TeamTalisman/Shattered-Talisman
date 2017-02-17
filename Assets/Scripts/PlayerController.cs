@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
@@ -45,14 +46,15 @@ public class PlayerController : MonoBehaviour {
 	public MoveSettings moveSettings = new MoveSettings();
 	public PhysicSettings physicsSettings = new PhysicSettings();
 	public InputSettings inputSettings = new InputSettings();
+	public Checkpoint lastCheckpoint;
 
+	public int health;
+	
 	bool Grounded() {
 		return Physics.Raycast(transform.position, Vector3.down, moveSettings.distanceToGrounded, moveSettings.ground);
 	}
 
-	void Start() {
-		targetRotation = transform.rotation;
-
+	void Awake() {
 		if (GetComponent<Rigidbody>()) {
 			rBody = GetComponent<Rigidbody>();
 		}
@@ -61,8 +63,13 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		forwardInput = turnInput = jumpInput = 0;
+		rBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
 		animatorSettings.animator = GetComponent<Animator>();
+	}
+
+	void Start() {
+		Init();
 	}
 
 	void GetInput() {
@@ -87,9 +94,11 @@ public class PlayerController : MonoBehaviour {
 		if (Mathf.Abs(forwardInput) > inputSettings.inputDelay) {
 			// move
 			velocity.z = moveSettings.forwardVelocity * forwardInput;
+			animatorSettings.animator.SetFloat("Forward", forwardInput, 0.1f, Time.deltaTime);
 		} else {
 			// zero velocity
 			velocity.z = 0;
+			// animatorSettings.animator.ApplyBuiltinRootMotion();
 		}
 	}
 
@@ -97,6 +106,8 @@ public class PlayerController : MonoBehaviour {
 		if (Mathf.Abs(turnInput) > inputSettings.inputDelay) {
 			targetRotation *= Quaternion.AngleAxis(moveSettings.rotateVelocity * turnInput * Time.deltaTime, Vector3.up);
 			transform.rotation = targetRotation;
+			animatorSettings.animator.SetFloat("Turn", turnInput, 0.1f, Time.deltaTime);
+
 		}
 	}
 
@@ -111,5 +122,78 @@ public class PlayerController : MonoBehaviour {
 			// decrease velocity.y
 			velocity.y -= physicsSettings.downAcceleration;
 		}
+	}
+
+	void Init() {
+		targetRotation = transform.rotation;
+		health = 3;
+		Spawn();
+	}
+
+	void Spawn() {
+		// If we don't have a checkpoint
+		if (lastCheckpoint == null) {
+			// Find the spawn point and get its Checkpoint script
+			lastCheckpoint = GameObject.FindGameObjectWithTag("SpawnPoint").
+												GetComponent<Checkpoint>();
+			// Collect the checkpoint
+			lastCheckpoint.Collect();
+		}
+
+		// Set the transform position of player to that of the checkpoint
+		SetPosition(lastCheckpoint.transform.position);
+	}
+
+	void SetPosition(Vector3 newPosition) {
+		transform.position = newPosition;
+	}
+
+	void OnTriggerEnter(Collider other) {
+		if (other.tag == "Void") {
+			CollideVoid();
+		} else if (other.tag == "CheckPoint") {
+			Checkpoint checkpoint = other.gameObject.GetComponent<Checkpoint>();
+			CollideCheckpoint(checkpoint);
+		} else if (other.tag == "EndPoint") {
+			Endpoint endpoint = other.gameObject.GetComponent<Endpoint>();
+			CollideEndPoint(endpoint);
+		}
+	}
+
+	void CollideVoid() {
+		Debug.Log("YOU FELL!");
+		health --;
+
+		if (health > 0) {
+			Spawn();
+		} else {
+			float fadeTime = gameObject.GetComponent<Fading>().BeginFade(1);
+			Invoke("GameOver", fadeTime);
+		}
+	}
+
+	void CollideCheckpoint(Checkpoint checkpoint) {
+		Debug.Log("YOU GOT A CHECKPOINT");
+		// Set out last checkpoint to checkpoint
+		lastCheckpoint = checkpoint;
+
+		// Collect checkpoint
+		lastCheckpoint.Collect();
+	}
+
+	void CollideEndPoint(Endpoint endpoint) {
+		Debug.Log("YOU FINISHED THE LEVEL!");
+		float fadeTime = gameObject.GetComponent<Fading>().BeginFade(1);
+		// Set out last checkpoint to checkpoint
+		// endpoint.Collect();
+		Invoke("EndLevel", fadeTime);
+	}
+
+	public void GameOver() {
+		SceneManager.LoadScene("GameOverScene");
+	}
+
+	public void EndLevel() {
+		SceneManager.LoadScene("EndScene");
 	}
 }
