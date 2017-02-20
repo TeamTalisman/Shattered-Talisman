@@ -48,85 +48,84 @@ public class PlayerController : MonoBehaviour {
 	public InputSettings inputSettings = new InputSettings();
 	public Checkpoint lastCheckpoint;
 
-	public int health;
+	public int health = 3;
 	
-	bool Grounded() {
-		return Physics.Raycast(transform.position, Vector3.down, moveSettings.distanceToGrounded, moveSettings.ground);
-	}
+	// bool Grounded() {
+	// 	return Physics.Raycast(transform.position, Vector3.down, moveSettings.distanceToGrounded, moveSettings.ground);
+	// }
 
-	void Awake() {
-		if (GetComponent<Rigidbody>()) {
-			rBody = GetComponent<Rigidbody>();
-		}
-		else {
-			Debug.LogError("The character needs a rigidbody");
-		}
+	// void Awake() {
+	// 	if (GetComponent<Rigidbody>()) {
+	// 		rBody = GetComponent<Rigidbody>();
+	// 	}
+	// 	else {
+	// 		Debug.LogError("The character needs a rigidbody");
+	// 	}
 
-		forwardInput = turnInput = jumpInput = 0;
-		rBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+	// 	forwardInput = turnInput = jumpInput = 0;
+	// 	rBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
-		animatorSettings.animator = GetComponent<Animator>();
-	}
+	// 	animatorSettings.animator = GetComponent<Animator>();
+	// }
 
 	void Start() {
 		Init();
 	}
 
-	void GetInput() {
-		forwardInput = Input.GetAxis(inputSettings.FORWARD_AXIS);
-		turnInput = Input.GetAxis(inputSettings.TURN_AXIS);
-		jumpInput = Input.GetAxisRaw(inputSettings.JUMP_AXIS);
-	}
+	// void GetInput() {
+	// 	forwardInput = Input.GetAxis(inputSettings.FORWARD_AXIS);
+	// 	turnInput = Input.GetAxis(inputSettings.TURN_AXIS);
+	// 	jumpInput = Input.GetAxisRaw(inputSettings.JUMP_AXIS);
+	// }
 
-	void Update() {
-		GetInput();
-		Turn();
-	}
+	// void Update() {
+	// 	// GetInput();
+	// 	// Turn();
+	// }
 
-	void FixedUpdate() {
-		Run();
-		Jump();
+	// void FixedUpdate() {
+	// 	// Run();
+	// 	// Jump();
 
-		rBody.velocity = transform.TransformDirection(velocity);
-	}
+	// 	// rBody.velocity = transform.TransformDirection(velocity);
+	// }
 
-	void Run() {
-		if (Mathf.Abs(forwardInput) > inputSettings.inputDelay) {
-			// move
-			velocity.z = moveSettings.forwardVelocity * forwardInput;
-			animatorSettings.animator.SetFloat("Forward", forwardInput, 0.1f, Time.deltaTime);
-		} else {
-			// zero velocity
-			velocity.z = 0;
-			// animatorSettings.animator.ApplyBuiltinRootMotion();
-		}
-	}
+	// void Run() {
+	// 	if (Mathf.Abs(forwardInput) > inputSettings.inputDelay) {
+	// 		// move
+	// 		velocity.z = moveSettings.forwardVelocity * forwardInput;
+	// 		animatorSettings.animator.SetFloat("Forward", forwardInput, 0.1f, Time.deltaTime);
+	// 	} else {
+	// 		// zero velocity
+	// 		velocity.z = 0;
+	// 		// animatorSettings.animator.ApplyBuiltinRootMotion();
+	// 	}
+	// }
 
-	void Turn() {
-		if (Mathf.Abs(turnInput) > inputSettings.inputDelay) {
-			targetRotation *= Quaternion.AngleAxis(moveSettings.rotateVelocity * turnInput * Time.deltaTime, Vector3.up);
-			transform.rotation = targetRotation;
-			animatorSettings.animator.SetFloat("Turn", turnInput, 0.1f, Time.deltaTime);
+	// void Turn() {
+	// 	if (Mathf.Abs(turnInput) > inputSettings.inputDelay) {
+	// 		targetRotation *= Quaternion.AngleAxis(moveSettings.rotateVelocity * turnInput * Time.deltaTime, Vector3.up);
+	// 		transform.rotation = targetRotation;
+	// 		animatorSettings.animator.SetFloat("Turn", turnInput, 0.1f, Time.deltaTime);
 
-		}
-	}
+	// 	}
+	// }
 
-	void Jump() {
-		if (jumpInput > 0 && Grounded()) {
-			// jump!
-			velocity.y = moveSettings.jumpVelocity;
-		} else if (jumpInput == 0 && Grounded()) {
-			// zero out velocity.y
-			velocity.y =0;
-		} else {
-			// decrease velocity.y
-			velocity.y -= physicsSettings.downAcceleration;
-		}
-	}
+	// void Jump() {
+	// 	if (jumpInput > 0 && Grounded()) {
+	// 		// jump!
+	// 		velocity.y = moveSettings.jumpVelocity;
+	// 	} else if (jumpInput == 0 && Grounded()) {
+	// 		// zero out velocity.y
+	// 		velocity.y =0;
+	// 	} else {
+	// 		// decrease velocity.y
+	// 		velocity.y -= physicsSettings.downAcceleration;
+	// 	}
+	// }
 
 	void Init() {
-		targetRotation = transform.rotation;
-		health = 3;
+		// targetRotation = transform.rotation;
 		Spawn();
 	}
 
