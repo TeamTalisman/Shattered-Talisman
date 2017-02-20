@@ -32,7 +32,7 @@ public class Platform_Move : MonoBehaviour {
         }
 
         if (other.tag == "Player")
-        {
+        {   Debug.Log("PLayer collision");
             other.transform.parent = transform;
         }
 
