@@ -2,17 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Invector.CharacterController;
 
 public class PlayerController : MonoBehaviour {
 
 	public Checkpoint lastCheckpoint;
 
 	public int health = 3;
-
+  protected vThirdPersonController cc; // access the ThirdPersonController component                
+	protected Timer timer;
 	void Start() {
 		Init();
 	}
 	void Init() {
+    cc = GetComponent<vThirdPersonController>();
+		timer = GetComponent<Timer>();
 		Spawn();
 	}
 
@@ -46,12 +50,23 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	void Fell() {
+		// Stop the timer
+		timer.isTimerRunning = false;
+
+		// Lock player movement
+		cc.lockMovement = true;
+
+		// Spawn
+		Spawn();
+	}
+
 	void CollideVoid() {
 		Debug.Log("YOU FELL!");
 		health --;
 
 		if (health > 0) {
-			Spawn();
+			Fell();
 		} else {
 			float fadeTime = gameObject.GetComponent<Fading>().BeginFade(1);
 			Invoke("GameOver", fadeTime);

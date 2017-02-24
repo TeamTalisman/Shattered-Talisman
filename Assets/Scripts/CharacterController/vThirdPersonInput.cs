@@ -3,8 +3,7 @@
 using UnityEngine.SceneManagement;
 #endif
 
-namespace Invector.CharacterController
-{
+namespace Invector.CharacterController {
     public class vThirdPersonInput : MonoBehaviour
     {
         #region variables

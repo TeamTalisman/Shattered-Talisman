@@ -13,7 +13,9 @@ public class TitleScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (Input.GetKeyDown("enter") || Input.GetKeyDown("return")) {
+			OnPlayButtonClicked();
+		}
 	}
 
 	public void OnPlayButtonClicked() {

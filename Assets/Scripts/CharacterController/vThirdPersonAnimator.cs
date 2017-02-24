@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Invector.CharacterController
-{
-    public abstract class vThirdPersonAnimator : vThirdPersonMotor
-    {
+namespace Invector.CharacterController {
+    public abstract class vThirdPersonAnimator : vThirdPersonMotor {
         public virtual void UpdateAnimator()
         {
             if (animator == null || !animator.enabled) return;

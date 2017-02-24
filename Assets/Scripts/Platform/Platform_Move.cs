@@ -11,40 +11,29 @@ public class Platform_Move : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-        transform.Translate(Vector3.forward * speed*direction*Time.deltaTime);
-		
+        transform.Translate(Vector3.forward * speed * direction * Time.deltaTime);
 	}
 
 
      private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Target")
-        {
+        if (other.tag == "Target") {
             if (direction == 1)
             
                 direction = -1;
-
-            
-
             else
                 direction = 1;
         }
 
-        if (other.tag == "Player")
-        {   Debug.Log("PLayer collision");
+        if (other.tag == "Player") {   
             other.transform.parent = transform;
         }
-
-
-
     }
 
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player")
-        {
+        if (other.tag == "Player") {
             other.transform.parent = null; ;
         }
 
