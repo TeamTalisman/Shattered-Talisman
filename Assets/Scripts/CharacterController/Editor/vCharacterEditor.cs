@@ -27,54 +27,54 @@ public class vCharacterEditor : Editor
         }
     }
 
-    public override void OnInspectorGUI()
-    {
-        if (!skin) skin = Resources.Load("skin") as GUISkin;
-        GUI.skin = skin;
+    // public override void OnInspectorGUI()
+    // {
+    //     if (!skin) skin = Resources.Load("skin") as GUISkin;
+    //     // GUI.skin = skin;
 
-        vThirdPersonMotor motor = (vThirdPersonMotor)target;
+    //     vThirdPersonMotor motor = (vThirdPersonMotor)target;
 
-        if (!motor) return;
+    //     if (!motor) return;
 
-        GUILayout.BeginVertical("Basic Controller LITE by Invector", "window");
+    //     GUILayout.BeginVertical("Player Controller", "window");
 
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
 
-        if (GUILayout.Button("Purchase FULL Version"))
-        {
-            UnityEditorInternal.AssetStore.Open("/content/59332");
-        }
+    //     // if (GUILayout.Button("Purchase FULL Version"))
+    //     // {
+    //     //     UnityEditorInternal.AssetStore.Open("/content/59332");
+    //     // }
 
-        EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
 
-        if (motor.gameObject.layer == LayerMask.NameToLayer("Default"))
-        {
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            EditorGUILayout.HelpBox("Please assign the Layer of the Character to 'Player'", MessageType.Warning);
-        }
+    //     if (motor.gameObject.layer == LayerMask.NameToLayer("Default"))
+    //     {
+    //         EditorGUILayout.Space();
+    //         EditorGUILayout.Space();
+    //         EditorGUILayout.HelpBox("Please assign the Layer of the Character to 'Player'", MessageType.Warning);
+    //     }
 
-        if (motor.groundLayer == 0)
-        {
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-            EditorGUILayout.HelpBox("Please assign the Ground Layer to 'Default' ", MessageType.Warning);
-        }
+    //     if (motor.groundLayer == 0)
+    //     {
+    //         EditorGUILayout.Space();
+    //         EditorGUILayout.Space();
+    //         EditorGUILayout.HelpBox("Please assign the Ground Layer to 'Default' ", MessageType.Warning);
+    //     }
 
-        EditorGUILayout.BeginVertical();        
+    //     EditorGUILayout.BeginVertical();        
 
-        base.OnInspectorGUI();
+    //     base.OnInspectorGUI();
       
-        GUILayout.EndVertical();
-        EditorGUILayout.EndVertical();        
+    //     GUILayout.EndVertical();
+    //     EditorGUILayout.EndVertical();        
 
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-    }   
+    //     EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
+    // }   
 
     //**********************************************************************************//
     // DEBUG RAYCASTS                                                                   //

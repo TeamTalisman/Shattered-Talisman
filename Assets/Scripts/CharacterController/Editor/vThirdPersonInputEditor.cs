@@ -9,29 +9,29 @@ public class vThirdPersonInputEditor : Editor
 {
     GUISkin skin;
 
-    public override void OnInspectorGUI()
-    {
-        if (!skin) skin = Resources.Load("skin") as GUISkin;
-        GUI.skin = skin;
+    // public override void OnInspectorGUI()
+    // {
+    //     if (!skin) skin = Resources.Load("skin") as GUISkin;
+    //     GUI.skin = skin;
 
-        GUILayout.BeginVertical("INPUT MANAGER", "window");
+    //     GUILayout.BeginVertical("INPUT MANAGER", "window");
 
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
 
-        EditorGUILayout.BeginVertical();        
+    //     EditorGUILayout.BeginVertical();        
        
-        base.OnInspectorGUI();
+    //     base.OnInspectorGUI();
         
-        GUILayout.Space(10);
+    //     GUILayout.Space(10);
              
 
-        GUILayout.EndVertical();
-        EditorGUILayout.EndVertical();
+    //     GUILayout.EndVertical();
+    //     EditorGUILayout.EndVertical();
 
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-    }
+    //     EditorGUILayout.Space();
+    //     EditorGUILayout.Space();
+    // }
 }
