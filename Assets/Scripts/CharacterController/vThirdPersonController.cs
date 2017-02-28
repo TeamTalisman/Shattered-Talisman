@@ -3,12 +3,6 @@ using System.Collections;
 
 namespace Invector.CharacterController {
   public class vThirdPersonController : vThirdPersonAnimator {
-    protected virtual void Start() {
-      #if !UNITY_EDITOR
-        Cursor.visible = true;
-      #endif
-    }
-
     public virtual void Sprint(bool value) {                       
       if (isGrounded)
           isSprinting = value;            
@@ -41,6 +35,5 @@ namespace Invector.CharacterController {
       transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(newRotation), strafeRotationSpeed * Time.fixedDeltaTime);
       targetRotation = transform.rotation;
     }
-
   }
 }

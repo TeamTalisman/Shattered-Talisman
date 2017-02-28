@@ -9,8 +9,14 @@ public class PlayerController : MonoBehaviour {
 	public Checkpoint lastCheckpoint;
 
 	public int health = 3;
-  protected vThirdPersonController cc; // access the ThirdPersonController component                
+  public vThirdPersonController cc; // access the ThirdPersonController component                
 	protected Timer timer;
+	Rigidbody _rigidbody;
+
+	void Awake() {
+		_rigidbody = GetComponent<Rigidbody>();
+	}
+
 	void Start() {
 		Init();
 	}
@@ -53,16 +59,16 @@ public class PlayerController : MonoBehaviour {
 	void Fell() {
 		// Stop the timer
 		timer.isTimerRunning = false;
-
+		// Set player movement to zero
+		cc.input = Vector2.zero;
 		// Lock player movement
 		cc.lockMovement = true;
-
 		// Spawn
 		Spawn();
 	}
 
 	void CollideVoid() {
-		Debug.Log("YOU FELL!");
+		Debug.Log("YOU FELL!"); 
 		health --;
 
 		if (health > 0) {
