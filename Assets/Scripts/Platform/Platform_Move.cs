@@ -4,38 +4,36 @@ using UnityEngine;
 
 public class Platform_Move : MonoBehaviour {
 
-    public float speed = 1;
+  public float speed = 1;
 
-    private int direction = 1;
-
-	
-	// Update is called once per frame
-	void Update () {
-        transform.Translate(Vector3.forward * speed * direction * Time.deltaTime);
-	}
+  private int direction = 1;
 
 
-     private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Target") {
-            if (direction == 1)
-            
-                direction = -1;
-            else
-                direction = 1;
-        }
+  // Update is called once per frame
+  void Update() {
+    transform.Translate(Vector3.forward * speed * direction * Time.deltaTime);
+  }
 
-        if (other.tag == "Player") {   
-            other.transform.parent = transform;
-        }
+
+  private void OnTriggerEnter(Collider other) {
+    if (other.tag == "Target") {
+      if (direction == 1)
+
+        direction = -1;
+      else
+        direction = 1;
     }
 
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Player") {
-            other.transform.parent = null; ;
-        }
-
+    if (other.tag == "Player") {
+      other.transform.parent = transform;
     }
+  }
+
+
+  private void OnTriggerExit(Collider other) {
+    if (other.tag == "Player") {
+      other.transform.parent = null; ;
+    }
+
+  }
 }
