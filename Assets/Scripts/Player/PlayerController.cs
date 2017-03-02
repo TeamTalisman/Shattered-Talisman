@@ -57,8 +57,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Fell() {
-		// Stop the timer
-		timer.isTimerRunning = false;
+	
 		// Set player movement to zero
 		cc.input = Vector2.zero;
 		// Lock player movement
