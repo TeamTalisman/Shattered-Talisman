@@ -27,9 +27,13 @@ public class v3rdPersonCamera : MonoBehaviour {
   [Tooltip("Debug purposes, lock the camera behind the character for better align the states")]
   public bool lockCamera;
   public bool lockRotation;
+  public bool lockHeight;
+  public bool lookDown;
   public float rightOffset = 0f;
   public float defaultDistance = 2.5f;
   public float height = 1.4f;
+  public float fixedTargetPosY = 2f;
+  public float downAngle = 22.68f;
   public float smoothFollow = 10f;
   public float xMouseSensitivity = 3f;
   public float yMouseSensitivity = 3f;
@@ -163,7 +167,15 @@ public class v3rdPersonCamera : MonoBehaviour {
 
     camDir = camDir.normalized;
 
-    var targetPos = new Vector3(currentTarget.position.x, currentTarget.position.y + offSetPlayerPivot, currentTarget.position.z);
+    var targetPos = Vector3.zero;
+
+    if (lockHeight) {
+      targetPos = new Vector3(currentTarget.position.x, fixedTargetPosY, currentTarget.position.z);
+
+    } else {
+      targetPos = new Vector3(currentTarget.position.x, currentTarget.position.y + offSetPlayerPivot, currentTarget.position.z);
+    }
+
     currentTargetPos = targetPos;
     desired_cPos = targetPos + new Vector3(0, height, 0);
     current_cPos = currentTargetPos + new Vector3(0, currentHeight, 0);
@@ -209,9 +221,14 @@ public class v3rdPersonCamera : MonoBehaviour {
     var rotation = Quaternion.LookRotation((lookPoint) - transform.position);
 
     //lookTargetOffSet = Vector3.Lerp(lookTargetOffSet, Vector3.zero, 1 * Time.fixedDeltaTime);
-
-    //rotation.eulerAngles += rotationOffSet + lookTargetOffSet;
+    
+    // rotation.eulerAngles += rotationOffSet + lookTargetOffSet;
     transform.rotation = rotation;
+
+    if (lookDown) {
+      transform.rotation = Quaternion.AngleAxis(downAngle, Vector3.right);
+    }
+
     movementSpeed = Vector2.zero;
   }
 
