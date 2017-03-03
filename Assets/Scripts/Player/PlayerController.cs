@@ -11,10 +11,10 @@ public class PlayerController : MonoBehaviour {
 	public int health = 3;
   public vThirdPersonController cc; // access the ThirdPersonController component                
 	protected Timer timer;
-	Rigidbody _rigidbody;
+	// Rigidbody _rigidbody;
 
 	void Awake() {
-		_rigidbody = GetComponent<Rigidbody>();
+		// _rigidbody = GetComponent<Rigidbody>();
 	}
 
 	void Start() {
