@@ -32,8 +32,8 @@ public class v3rdPersonCamera : MonoBehaviour {
   public float rightOffset = 0f;
   public float defaultDistance = 2.5f;
   public float height = 1.4f;
-  public float fixedTargetPosY = 2f;
-  public float downAngle = 22.68f;
+  public float fixedTargetPosY = 2.5f;
+  public float downAngle = 32f;
   public float smoothFollow = 10f;
   public float xMouseSensitivity = 3f;
   public float yMouseSensitivity = 3f;
@@ -170,7 +170,7 @@ public class v3rdPersonCamera : MonoBehaviour {
     var targetPos = Vector3.zero;
 
     if (lockHeight) {
-      targetPos = new Vector3(currentTarget.position.x, fixedTargetPosY, currentTarget.position.z);
+      targetPos = new Vector3(currentTarget.position.x, currentTarget.position.y + fixedTargetPosY, currentTarget.position.z);
 
     } else {
       targetPos = new Vector3(currentTarget.position.x, currentTarget.position.y + offSetPlayerPivot, currentTarget.position.z);
