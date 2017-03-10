@@ -227,14 +227,14 @@ namespace Invector.CharacterController {
 
       // set speed to both vertical and horizontal inputs
       speed = Mathf.Abs(input.x) + Mathf.Abs(input.y);
-      speed = Mathf.Clamp(speed, 0, 1);
+      // speed = Mathf.Clamp(speed, 0, 1);
 
       if (accelerate) {
         speed += acceleration;
         // !isSprinting && 
         if (maxSpeed > speed) {
           // isSprinting = false;
-          acceleration += 0.1f * Time.deltaTime;
+          acceleration += 0.025f;
         } else {
           // isSprinting = true;
         }
@@ -245,7 +245,7 @@ namespace Invector.CharacterController {
         if (isSprinting && input != Vector2.zero) speed += 0.5f;
       }
 
-      Debug.Log(speed);
+      // Debug.Log(speed);
       if (input != Vector2.zero && targetDirection.magnitude > 0.1f) {
         Vector3 lookDirection = targetDirection.normalized;
         freeRotation = Quaternion.LookRotation(lookDirection, transform.up);
