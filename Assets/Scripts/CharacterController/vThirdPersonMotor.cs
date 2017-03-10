@@ -33,6 +33,9 @@ namespace Invector.CharacterController {
     public LocomotionType locomotionType = LocomotionType.FreeWithStrafe;
     [Tooltip("lock the player movement")]
     public bool lockMovement;
+    [Tooltip("Check if we want character to accelerate")]
+    public bool accelerate = true;
+    public float acceleration = 0f;
     [Tooltip("Speed of the rotation on free directional movement")]
     [SerializeField]
     public float freeRotationSpeed = 10f;
@@ -40,7 +43,9 @@ namespace Invector.CharacterController {
     public float strafeRotationSpeed = 10f;
 
     [Header("Jump Options")]
-
+    [Tooltip("Check to slow the character's acceleration while jumping")]
+    public bool slowAccelerationOnJump = true; 
+     
     [Tooltip("Check to control the character while jumping")]
     public bool jumpAirControl = true;
     [Tooltip("How much time the character will be jumping")]
@@ -48,11 +53,12 @@ namespace Invector.CharacterController {
     [HideInInspector]
     public float jumpCounter;
     [Tooltip("Add Extra jump speed, based on your speed input the character will move forward")]
-    public float jumpForward = 3f;
+    public float jumpForward = 1f;
     [Tooltip("Add Extra jump height, if you want to jump only with Root Motion leave the value with 0.")]
-    public float jumpHeight = 25f;
+    public float jumpHeight = 15f;
 
     [Header("Movement Speed")]
+    public float maxSpeed = 2f;
 
     [Tooltip("Add extra speed for the locomotion movement, keep this value at 0 if you want to use only root motion speed.")]
     public float freeWalkSpeed = 0.5f;
@@ -76,6 +82,7 @@ namespace Invector.CharacterController {
     [Tooltip("Higher value will result jittering on ramps, lower values will have difficulty on steps")]
     public float stepSmooth = 2.5f;
     [Tooltip("Max angle to walk")]
+
     [SerializeField]
     protected float slopeLimit = 45f;
     [Tooltip("Apply extra gravity when the character is not grounded")]
@@ -211,13 +218,34 @@ namespace Invector.CharacterController {
       if (direction >= 0.7 || direction <= -0.7 || speed <= 0.1) isSprinting = false;
     }
 
+
     void FreeMovement() {
+
+      if (input == Vector2.zero) {
+        acceleration = 0;
+      } 
+
       // set speed to both vertical and horizontal inputs
       speed = Mathf.Abs(input.x) + Mathf.Abs(input.y);
       speed = Mathf.Clamp(speed, 0, 1);
-      // add 0.5f on sprint to change the animation on animator
-      if (isSprinting && input != Vector2.zero) speed += 0.5f;
 
+      if (accelerate) {
+        speed += acceleration;
+        // !isSprinting && 
+        if (maxSpeed > speed) {
+          // isSprinting = false;
+          acceleration += 0.1f * Time.deltaTime;
+        } else {
+          // isSprinting = true;
+        }
+
+        speed = Mathf.Clamp(speed, 0, 1.5f);
+      } else {
+        // add 0.5f on sprint to change the animation on animator
+        if (isSprinting && input != Vector2.zero) speed += 0.5f;
+      }
+
+      Debug.Log(speed);
       if (input != Vector2.zero && targetDirection.magnitude > 0.1f) {
         Vector3 lookDirection = targetDirection.normalized;
         freeRotation = Quaternion.LookRotation(lookDirection, transform.up);
@@ -248,6 +276,13 @@ namespace Invector.CharacterController {
 
     protected void ControlJumpBehaviour() {
       if (!isJumping) return;
+
+      // Remove this line or change it
+      // If you don't want to change acceleration
+      // When jumping
+      if (slowAccelerationOnJump) {
+        acceleration /= 2f;
+      }
 
       if (isJumping) {
         jumpCounter -= Time.deltaTime;
