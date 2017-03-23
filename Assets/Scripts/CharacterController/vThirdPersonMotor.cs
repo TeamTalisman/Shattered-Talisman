@@ -227,14 +227,17 @@ namespace Invector.CharacterController {
 
       // set speed to both vertical and horizontal inputs
       speed = Mathf.Abs(input.x) + Mathf.Abs(input.y);
-      // speed = Mathf.Clamp(speed, 0, 1);
+      speed = Mathf.Clamp(speed, 0, 1.2f);
 
       if (accelerate) {
-        speed += acceleration;
+        // speed += acceleration;
+        speed += acceleration * Time.fixedDeltaTime;
+
         // !isSprinting && 
         if (maxSpeed > speed) {
           // isSprinting = false;
-          acceleration += 0.025f;
+          // acceleration += 0.025f;
+          acceleration += 0.15f;
         } else {
           // isSprinting = true;
         }
@@ -280,9 +283,9 @@ namespace Invector.CharacterController {
       // Remove this line or change it
       // If you don't want to change acceleration
       // When jumping
-      if (slowAccelerationOnJump) {
-        acceleration /= 2f;
-      }
+      // if (slowAccelerationOnJump) {
+      //   acceleration /= 2f;
+      // }
 
       if (isJumping) {
         jumpCounter -= Time.deltaTime;
