@@ -13,6 +13,5 @@ public class Hold_Character : MonoBehaviour {
     private void OnTriggerExit(Collider col)
     {
         col.transform.parent = null;
-
     }
 }

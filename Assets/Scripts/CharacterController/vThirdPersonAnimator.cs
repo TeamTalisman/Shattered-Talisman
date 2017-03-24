@@ -19,7 +19,6 @@ namespace Invector.CharacterController {
       }
 
       // fre movement get the input 0 to 1
-      Debug.Log("ANIM SPEED: " + speed);
       animator.SetFloat("InputVertical", speed, 0.1f, Time.deltaTime);
     }
 
@@ -28,7 +27,6 @@ namespace Invector.CharacterController {
       // this allows us to modify the positional speed before it's applied.
       if (isGrounded) {
         transform.rotation = animator.rootRotation;
-
         var speedDir = new Vector2(direction, speed);
         var strafeSpeed = (isSprinting ? 1.5f : 1f) * Mathf.Clamp(speedDir.magnitude, 0f, 1f);
         // strafe extra speed
@@ -44,7 +42,8 @@ namespace Invector.CharacterController {
           // free extra speed                
           if (speed <= 0.5f)
             ControlSpeed(freeWalkSpeed);
-          else if (speed > 0.5 && speed <= 1f)
+          // else if (speed > 0.5 && speed <= 1f)
+          else if (speed > 0.5 && speed < 1.5f)
             ControlSpeed(freeRunningSpeed);
           else
             ControlSpeed(freeSprintSpeed);
