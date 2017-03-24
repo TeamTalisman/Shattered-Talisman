@@ -12,9 +12,11 @@ public class PlayerController : MonoBehaviour {
   public vThirdPersonController cc; // access the ThirdPersonController component                
 	protected Timer timer;
 	// Rigidbody _rigidbody;
+	ParticleSystem particles;
 
 	void Awake() {
 		// _rigidbody = GetComponent<Rigidbody>();
+		particles = GetComponentInChildren<ParticleSystem>();
 	}
 
 	void Start() {
@@ -50,9 +52,10 @@ public class PlayerController : MonoBehaviour {
 		} else if (other.tag == "CheckPoint") {
 			Checkpoint checkpoint = other.gameObject.GetComponent<Checkpoint>();
 			CollideCheckpoint(checkpoint);
+		} else if (other.tag == "LevelPoint") {
+			Invoke("CollideLevelPoint", 0.2f);
 		} else if (other.tag == "EndPoint") {
-			Endpoint endpoint = other.gameObject.GetComponent<Endpoint>();
-			CollideEndPoint(endpoint);
+			Invoke("CollideEndPoint", 0.2f);
 		}
 	}
 
@@ -67,7 +70,6 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void CollideVoid() {
-		Debug.Log("YOU FELL!"); 
 		health --;
 
 		if (health > 0) {
@@ -79,19 +81,24 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void CollideCheckpoint(Checkpoint checkpoint) {
-		Debug.Log("YOU GOT A CHECKPOINT");
 		// Set out last checkpoint to checkpoint
 		lastCheckpoint = checkpoint;
-
+		particles.Play();
+		
 		// Collect checkpoint
 		lastCheckpoint.Collect();
+		Invoke("stopParticles", 0.5f);
 	}
 
-	void CollideEndPoint(Endpoint endpoint) {
-		Debug.Log("YOU FINISHED THE LEVEL!");
+	void CollideLevelPoint() {
 		float fadeTime = gameObject.GetComponent<Fading>().BeginFade(1);
-		// Set out last checkpoint to checkpoint
-		// endpoint.Collect();
+
+		Invoke("NextLevel", fadeTime);
+	}
+
+	void CollideEndPoint() {
+		float fadeTime = gameObject.GetComponent<Fading>().BeginFade(1);
+
 		Invoke("EndLevel", fadeTime);
 	}
 
@@ -99,7 +106,15 @@ public class PlayerController : MonoBehaviour {
 		SceneManager.LoadScene("GameOverScene");
 	}
 
+	public void NextLevel() {
+		SceneManager.LoadScene("Level 2");
+	}
+
 	public void EndLevel() {
 		SceneManager.LoadScene("EndScene");
+	}
+
+	void stopParticles() {
+		particles.Stop();
 	}
 }

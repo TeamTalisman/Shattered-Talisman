@@ -20,12 +20,15 @@ public class PlatformMover : MonoBehaviour {
 
 	public float changeDestinationTime = 7.0f;
 
+	ParticleSystem particles;
+
 	void Awake() {
 		foreach (Transform child in transform) {
     	if (child.tag == PLATFORM_DESTINATION_TAG) {
       	Destinatons.Add(child.transform);
       }
     }
+		particles = GetComponentInChildren<ParticleSystem>();
 	}
 
 	// Use this for initialization
@@ -34,19 +37,13 @@ public class PlatformMover : MonoBehaviour {
 		currentDestinationIndex = 0;
 		incrementor = 1;
 		ChangeDestination();
+		startParticles();
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
 		destinationPosition = Vector3.Lerp(transform.position, nextDestination, smoothTime * Time.deltaTime);
 		transform.position = destinationPosition;
-
-		// TODO: When platform has reach destination => Invoke ChangeDestination
-		// if (transform.position == destinationPosition) {
-		// 	// Invoke("ChangeDestination", changeDestinationTime);
-		// 	Debug.Log("Reached Destinaton");
-		// 	ChangeDestination();
-		// }
 	}
 
 	void ChangeDestination() {		
@@ -68,5 +65,14 @@ public class PlatformMover : MonoBehaviour {
 
 		// Call this again at changeDestinationTime
 		Invoke("ChangeDestination", changeDestinationTime);
+		Invoke("startParticles", 5f);
+	}
+
+	void startParticles() {
+		particles.Play();
+		Invoke("stopParticles", 0.5f);
+	}
+	void stopParticles() {
+		particles.Stop();
 	}
 }
